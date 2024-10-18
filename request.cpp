@@ -3,7 +3,7 @@
 string Request::randIp() {
     string ip = "";
     for (int i = 0; i < 4; i++) {
-        ip += to_string(rand() % 256);
+        ip += to_string(randInt(0, 255));
         if (i < 3) ip += '.';
     }
     return ip;
@@ -12,7 +12,7 @@ string Request::randIp() {
 Request::Request() :
     ipIn{randIp()},
     ipOut{randIp()},
-    requiredTime{rand() % 1000 + 1uLL}
+    requiredTime{randInt(5, 20)}
 {}
 
 Request::Request(string ipIn, string ipOut, uint64_t requiredTime) :
