@@ -12,7 +12,7 @@ string Request::randIp() {
 Request::Request() :
     ipIn{randIp()},
     ipOut{randIp()},
-    requiredTime{randInt(5, 20)}
+    requiredTime{static_cast<uint64_t>(randInt(REQ_SIZE_MIN, REQ_SIZE_MAX))}
 {}
 
 Request::Request(string ipIn, string ipOut, uint64_t requiredTime) :
