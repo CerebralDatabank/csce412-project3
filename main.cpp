@@ -4,6 +4,9 @@
 // Prints clock cycles (including no-op ones) on right of screen
 // #define DEBUG
 
+// Add new request every NEW_REQ_INTERVAL cycles
+#define NEW_REQ_INTERVAL 50
+
 int main() {
     puts("\n  \e[38;5;46;1;7m  Project 3 - Load Balancer  \e[27m\n        \e[96mBy Gopal Othayoth\n          \e[23;2;3mCSCE 412 500\e[m\n");
 
@@ -26,7 +29,7 @@ int main() {
     printf("Starting request queue size: \e[96m%llu\e[m\n", lb.queueSize());
 
     for (uint64_t time = 0; time <= timeToRun; time = lb.clock()) {
-        if (time % 50 == 0) {
+        if (time % NEW_REQ_INTERVAL == 0) {
             int numRequests = randInt(1, 5);
             for (int i = 0; i < numRequests; ++i)
                 lb.addRequest(new Request{});

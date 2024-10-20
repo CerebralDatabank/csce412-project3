@@ -8,8 +8,7 @@ LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits) :
         static_cast<uint32_t>(to_string(maxServers).length()),
         static_cast<uint32_t>(to_string(REQ_SIZE_MAX).length())
     };
-    for (uint32_t i = 1; i <= maxServers; ++i)
-        servers.push_back(new WebServer{i, logInfo});
+    servers.push_back(new WebServer{1, logInfo});
 }
 
 LoadBalancer::~LoadBalancer() {
@@ -22,6 +21,23 @@ void LoadBalancer::addRequest(Request* request) {
 }
 
 uint64_t LoadBalancer::clock() {
+    if (requests.size() > (maxServers * 5) && servers.size() < maxServers) {
+        uint32_t newId = servers.size() + 1;
+        servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo});
+        printf(
+            "\e[2m[%*llu] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[92mnow online due to higher demand\e[m\n",
+            logInfo.maxTimeDigits, time, logInfo.maxIdDigits, newId
+        );
+    }
+    else if (requests.size() < (maxServers * 2) && servers.size() > 1) {
+        uint32_t oldId = servers.size();
+        delete servers.back();
+        servers.pop_back();
+        printf(
+            "\e[2m[%*llu] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[91mnow offline due to lower demand\e[m\n",
+            logInfo.maxTimeDigits, time, logInfo.maxIdDigits, oldId
+        );
+    }
     for (WebServer* server : servers) {
         if (requests.empty()) goto end;
         if (!server->isFree(time)) continue;
