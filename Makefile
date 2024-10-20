@@ -6,4 +6,8 @@ all:
 
 .PHONY: clean
 clean:
+ifeq ($(OS),Windows_NT)
+	del project3*
+else
 	rm -f project3
+endif
