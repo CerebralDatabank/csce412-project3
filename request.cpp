@@ -1,3 +1,11 @@
+/** 
+ * @file request.cpp
+ * @brief Implementation file for the Request class.
+ * 
+ * This file contains the implementation of the Request class, which represents a network request with source and destination IP addresses and a required time.
+ * 
+ * @sa request.h
+ */
 #include "request.h"
 
 IP Request::randIp() {

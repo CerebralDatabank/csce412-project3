@@ -9,11 +9,38 @@
 // #define DEBUG
 
 // CONFIG
-// Add new request every NEW_REQ_INTERVAL cycles
+/**
+ * @brief Interval for new requests.
+ * 
+ * This constant defines the interval, in clock cycles, at which new
+ * requests are generated and added.
+ */
 constexpr int NEW_REQ_INTERVAL = 50;
+/**
+ * @brief Minimum number of requests to add.
+ * 
+ * This constant defines the minimum amount of requests to add when
+ * adding requests on the above interval.
+ */
 constexpr int NEW_REQ_AMT_MIN = 1;
+/**
+ * @brief Maximum number of requests to add.
+ * 
+ * This constant defines the maximum amount of requests to add when
+ * adding requests on the above interval.
+ */
 constexpr int NEW_REQ_AMT_MAX = 5;
 
+/**
+ * @brief Enables ANSI escape code support on Windows consoles.
+ *
+ * This function checks if the program is running on a Windows platform.
+ * If it is, it retrieves the current console mode and enables the 
+ * ENABLE_VIRTUAL_TERMINAL_PROCESSING flag, which allows the console to 
+ * interpret ANSI escape sequences for text formatting.
+ *
+ * @note This function has no effect on non-Windows platforms.
+ */
 void enableAnsiSupport() {
     #ifdef _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -25,6 +52,17 @@ void enableAnsiSupport() {
     #endif
 }
 
+/**
+ * @brief Entry point of the Load Balancer project.
+ *
+ * This function initializes the ANSI support for Windows, displays the project
+ * information, and prompts the user for configuration details such as the time
+ * to run, the number of servers, and the IP range to block. It then initializes
+ * the LoadBalancer with the given parameters and starts processing requests. At
+ * the end of the simulation, it displays a summary of the requests processed.
+ *
+ * @return Returns 0 upon successful execution.
+ */
 int main() {
     enableAnsiSupport();
     puts("\n  \e[38;5;46;1;7m  Project 3 - Load Balancer  \e[27m\n        \e[96mBy Gopal Othayoth\n          \e[23;2;3mCSCE 412 500\e[m\n");
@@ -64,10 +102,13 @@ int main() {
     cin.get();
     fputs("\e[m\n", stdout);
 
+    Stats stats{};
+
     LoadBalancer lb{
         maxServers,
         static_cast<uint32_t>(to_string(timeToRun).length()),
-        IPRange{blockRangeMin, blockRangeMax}
+        IPRange{blockRangeMin, blockRangeMax},
+        &stats
     };
 
     for (uint32_t i = 0; i < startQSize; ++i) {
@@ -89,7 +130,10 @@ int main() {
 
     puts("\nSummary:");
     printf("| Starting request queue size: \e[96m%" PRIu64 "\e[m\n", startQSize);
-    printf("| Ending request queue size:   \e[96m%" PRIu64 "\e[m\n\n", lb.queueSize());
+    printf("| Ending request queue size: \e[96m%" PRIu64 "\e[m\n\n", lb.queueSize());
+    printf("| Requests completed: \e[92m%u\e[m\n", stats.requestsCompleted);
+    printf("| Requests blocked: \e[91m%u\e[m\n", stats.requestsBlocked);
+    printf("| Total requests processed: \e[96m%u\e[m\n\n", stats.requestsCompleted + stats.requestsBlocked);
 
     return 0;
 }
