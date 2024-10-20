@@ -1,7 +1,7 @@
 #include "load_balancer.h"
 
-LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits) :
-    time{0}, requests{}, servers{}, maxServers{maxServers}
+LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked) :
+    time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}
 {
     logInfo = LogInfo{
         maxTimeDigits,
@@ -21,7 +21,19 @@ void LoadBalancer::addRequest(Request* request) {
 }
 
 uint64_t LoadBalancer::clock() {
-    if (requests.size() > (maxServers * 5) && servers.size() < maxServers) {
+    // Block requests in blocked IP ranges
+    while (!requests.empty() && blocked.test(requests.front()->ipIn)) {
+        Request* request = requests.front();
+        requests.pop();
+        printf(
+            "\e[2m[%*llu] \e[22;38;5;190m[System %*s]\e[m Request of size \e[38;5;40m%*llu\e[m (\e[38;5;208m%15s\e[m \e[91m-X \e[38;5;207m%-15s\e[m) \e[91mblocked\e[m\n",
+            logInfo.maxTimeDigits, time, logInfo.maxIdDigits, "", logInfo.maxReqSizeDigits, request->requiredTime, request->ipIn.c_str(), request->ipOut.c_str()
+        );
+        delete request;
+    }
+
+    // Dynamic server allocation
+    if (requests.size() > (servers.size() * 5) && servers.size() < maxServers) {
         uint32_t newId = servers.size() + 1;
         servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo});
         printf(
@@ -29,7 +41,7 @@ uint64_t LoadBalancer::clock() {
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, newId
         );
     }
-    else if (requests.size() < (maxServers * 2) && servers.size() > 1) {
+    else if (requests.size() < (servers.size() * 2) && servers.size() > 1) {
         uint32_t oldId = servers.size();
         delete servers.back();
         servers.pop_back();
@@ -38,6 +50,8 @@ uint64_t LoadBalancer::clock() {
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, oldId
         );
     }
+
+    // Assign requests to servers
     for (WebServer* server : servers) {
         if (requests.empty()) goto end;
         if (!server->isFree(time)) continue;

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "request.h"
 #include "web_server.h"
+#include "ip_range.h"
 #include <queue>
 #include <vector>
 
@@ -13,9 +14,10 @@ private:
     queue<Request*> requests;
     vector<WebServer*> servers;
     uint32_t maxServers;
+    IPRange blocked;
     LogInfo logInfo; // to pass to WebServer
 public:
-    LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits);
+    LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked);
     ~LoadBalancer();
     void addRequest(Request* request);
     uint64_t clock();

@@ -9,13 +9,13 @@
 
 class Request {
 public:
-    string ipIn;
-    string ipOut;
+    IP ipIn;
+    IP ipOut;
     uint64_t requiredTime;
 
     Request();
-    Request(string ipIn, string ipOut, uint64_t requiredTime);
-    static string randIp();
+    Request(IP ipIn, IP ipOut, uint64_t requiredTime);
+    static IP randIp();
 };
 
 #endif // REQUEST_H
