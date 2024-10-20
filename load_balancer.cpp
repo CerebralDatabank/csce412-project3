@@ -1,5 +1,10 @@
 #include "load_balancer.h"
 
+// CONFIG
+// Multipliers for dynamic server allocation
+#define SERVERS_MULT_LOW 2
+#define SERVERS_MULT_HIGH 5
+
 LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked) :
     time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}
 {
@@ -33,7 +38,7 @@ uint64_t LoadBalancer::clock() {
     }
 
     // Dynamic server allocation
-    if (requests.size() > (servers.size() * 5) && servers.size() < maxServers) {
+    if (requests.size() > (servers.size() * SERVERS_MULT_LOW) && servers.size() < maxServers) {
         uint32_t newId = servers.size() + 1;
         servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo});
         printf(
@@ -41,7 +46,7 @@ uint64_t LoadBalancer::clock() {
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, newId
         );
     }
-    else if (requests.size() < (servers.size() * 2) && servers.size() > 1) {
+    else if (requests.size() < (servers.size() * SERVERS_MULT_HIGH) && servers.size() > 1) {
         uint32_t oldId = servers.size();
         delete servers.back();
         servers.pop_back();
