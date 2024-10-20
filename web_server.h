@@ -36,6 +36,24 @@ struct LogInfo {
 };
 
 /**
+ * @struct Stats
+ * @brief Structure to hold statistics for the load balancer.
+ * 
+ * This structure contains counters for tracking the number of requests
+ * that have been blocked and the number of requests that have been completed.
+ */
+struct Stats {
+    /**
+     * @brief Number of requests that have been blocked.
+     */
+    uint32_t requestsBlocked;
+    /**
+     * @brief Number of requests that have been completed.
+     */
+    uint32_t requestsCompleted;
+};
+
+/**
  * @class WebServer
  * @brief Represents a web server that handles requests and logs information.
  * 
@@ -57,6 +75,10 @@ private:
      * @brief Information used for logging purposes.
      */
     LogInfo logInfo; // for logging
+    /**
+     * @brief Pointer to the statistics structure.
+     */
+    Stats* stats;
 public:
     /**
      * @brief Unique identifier for the web server.
@@ -64,12 +86,13 @@ public:
     uint32_t id;
 
     /**
-     * @brief Constructs a WebServer object with a given ID and logging information.
+     * @brief Constructs a WebServer object with a given ID, logging information, and statistics.
      * 
      * @param id The unique identifier for the web server.
      * @param logInfo The logging information to be used by the server.
+     * @param stats Pointer to the statistics structure.
      */
-    WebServer(uint32_t id, LogInfo logInfo);
+    WebServer(uint32_t id, LogInfo logInfo, Stats* stats);
     /**
      * @brief Assigns a request to the server and sets the time when the server will be free.
      * 

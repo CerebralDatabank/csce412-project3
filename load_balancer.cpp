@@ -13,7 +13,7 @@ LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange 
         static_cast<uint32_t>(to_string(maxServers).length()),
         static_cast<uint32_t>(to_string(REQ_SIZE_MAX).length())
     };
-    servers.push_back(new WebServer{1, logInfo});
+    servers.push_back(new WebServer{1, logInfo, stats});
 }
 
 LoadBalancer::~LoadBalancer() {
@@ -35,12 +35,13 @@ uint64_t LoadBalancer::clock() {
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, "", logInfo.maxReqSizeDigits, request->requiredTime, request->ipIn.c_str(), request->ipOut.c_str()
         );
         delete request;
+        ++stats->requestsBlocked;
     }
 
     // Dynamic server allocation
     if (requests.size() > (servers.size() * SERVERS_MULT_LOW) && servers.size() < maxServers) {
         uint32_t newId = servers.size() + 1;
-        servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo});
+        servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo, stats});
         printf(
             "\e[2m[%*" PRIu64 "] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[92mnow online due to higher demand\e[m\n",
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, newId
@@ -70,4 +71,8 @@ uint64_t LoadBalancer::clock() {
 
 size_t LoadBalancer::queueSize() {
     return requests.size();
+}
+
+size_t LoadBalancer::serverCount() {
+    return servers.size();
 }

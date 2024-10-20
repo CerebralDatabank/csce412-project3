@@ -28,24 +28,6 @@ constexpr int SERVERS_MULT_LOW = 2;
  */
 constexpr int SERVERS_MULT_HIGH = 5;
 
-/**
- * @struct Stats
- * @brief Structure to hold statistics for the load balancer.
- * 
- * This structure contains counters for tracking the number of requests
- * that have been blocked and the number of requests that have been completed.
- */
-struct Stats {
-    /**
-     * @brief Number of requests that have been blocked.
-     */
-    uint32_t requestsBlocked;
-    /**
-     * @brief Number of requests that have been completed.
-     */
-    uint32_t requestsCompleted;
-};
-
 class LoadBalancer {
 private:
     /**
@@ -119,6 +101,13 @@ public:
      * @return Size of the request queue.
      */
     size_t queueSize();
+
+    /**
+     * @brief Returns the number of servers in the load balancer.
+     * 
+     * @return Number of servers.
+     */
+    size_t serverCount();
 };
 
 #endif // LOAD_BALANCER_H

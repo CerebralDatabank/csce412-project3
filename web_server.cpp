@@ -6,8 +6,8 @@
  */
 #include "web_server.h"
 
-WebServer::WebServer(uint32_t id, LogInfo logInfo) :
-    request{nullptr}, timeWhenFree{0}, logInfo{logInfo}, id{id}
+WebServer::WebServer(uint32_t id, LogInfo logInfo, Stats* stats) :
+    request{nullptr}, timeWhenFree{0}, logInfo{logInfo}, stats{stats}, id{id}
 {}
 
 void WebServer::takeRequest(Request* req, uint64_t time) {
@@ -17,6 +17,7 @@ void WebServer::takeRequest(Request* req, uint64_t time) {
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, id, logInfo.maxReqSizeDigits, request->requiredTime, request->ipIn.c_str(), request->ipOut.c_str()
         );
         delete request;
+        ++stats->requestsCompleted;
     }
     request = req;
     timeWhenFree = time + req->requiredTime;

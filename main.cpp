@@ -130,10 +130,11 @@ int main() {
 
     puts("\nSummary:");
     printf("| Starting request queue size: \e[96m%" PRIu64 "\e[m\n", startQSize);
-    printf("| Ending request queue size: \e[96m%" PRIu64 "\e[m\n\n", lb.queueSize());
+    printf("| Ending request queue size: \e[96m%" PRIu64 "\e[m\n", lb.queueSize());
     printf("| Requests completed: \e[92m%u\e[m\n", stats.requestsCompleted);
     printf("| Requests blocked: \e[91m%u\e[m\n", stats.requestsBlocked);
-    printf("| Total requests processed: \e[96m%u\e[m\n\n", stats.requestsCompleted + stats.requestsBlocked);
-
+    printf("| Total requests processed: \e[96m%u\e[m\n", stats.requestsCompleted + stats.requestsBlocked);
+    printf("| Starting active server count: \e[96m1\e[m of \e[96m%u\e[m\n", maxServers);
+    printf("| Ending active server count: \e[96m%" PRIu64 "\e[m of \e[96m%u\e[m\n\n", lb.serverCount(), maxServers);
     return 0;
 }
