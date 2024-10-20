@@ -3,8 +3,12 @@
 
 #include <cstdint>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <queue>
 
-using namespace std;
+// using namespace std;
+using std::cin, std::string, std::to_string, std::queue, std::vector;
 
 typedef string IP;
 

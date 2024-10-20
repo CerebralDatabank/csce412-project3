@@ -1,6 +1,9 @@
 #include "common.h"
 #include "load_balancer.h"
 #include "ip_range.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 // Prints clock cycles (including no-op ones) on right of screen
 // #define DEBUG
@@ -11,7 +14,19 @@ constexpr int NEW_REQ_INTERVAL = 50;
 constexpr int NEW_REQ_AMT_MIN = 1;
 constexpr int NEW_REQ_AMT_MAX = 5;
 
+void enableAnsiSupport() {
+    #ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hConsole == INVALID_HANDLE_VALUE) return;
+
+    DWORD mode;
+    if (GetConsoleMode(hConsole, &mode))
+        SetConsoleMode(hConsole, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    #endif
+}
+
 int main() {
+    enableAnsiSupport();
     puts("\n  \e[38;5;46;1;7m  Project 3 - Load Balancer  \e[27m\n        \e[96mBy Gopal Othayoth\n          \e[23;2;3mCSCE 412 500\e[m\n");
 
     srand(time(nullptr));
