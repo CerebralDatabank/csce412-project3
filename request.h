@@ -4,8 +4,9 @@
 #include <string>
 #include "common.h"
 
-#define REQ_SIZE_MIN 5
-#define REQ_SIZE_MAX 20
+// CONFIG
+constexpr int REQ_SIZE_MIN = 5;
+constexpr int REQ_SIZE_MAX = 20;
 
 class Request {
 public:

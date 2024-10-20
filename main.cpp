@@ -5,10 +5,11 @@
 // Prints clock cycles (including no-op ones) on right of screen
 // #define DEBUG
 
+// CONFIG
 // Add new request every NEW_REQ_INTERVAL cycles
-#define NEW_REQ_INTERVAL 50
-#define NEW_REQ_AMT_MIN 1
-#define NEW_REQ_AMT_MAX 5
+constexpr int NEW_REQ_INTERVAL = 50;
+constexpr int NEW_REQ_AMT_MIN = 1;
+constexpr int NEW_REQ_AMT_MAX = 5;
 
 int main() {
     puts("\n  \e[38;5;46;1;7m  Project 3 - Load Balancer  \e[27m\n        \e[96mBy Gopal Othayoth\n          \e[23;2;3mCSCE 412 500\e[m\n");
@@ -28,14 +29,25 @@ int main() {
     puts("\e[mIP Range to block (leave empty for default):");
 
     cin.ignore();
-    fputs("\n\e[2m- Upper bound (default 200.10.0.0):\e[1F\e[m- Lower bound (default 192.168.0.1): \e[38;5;220m", stdout);
+    fputs("\n\e[2m| Upper bound (default 200.10.0.0):\e[1F\e[m| Lower bound (default 192.168.0.1): \e[38;5;220m", stdout);
     getline(cin, blockRangeMin);
     if (blockRangeMin.empty()) blockRangeMin = "192.168.0.1";
 
-    fputs("\e[m- Upper bound (default 200.10.0.0): \e[38;5;220m", stdout);
+    fputs("\e[m| Upper bound (default 200.10.0.0): \e[38;5;220m", stdout);
     getline(cin, blockRangeMax);
-    if (blockRangeMax.empty()) blockRangeMax = "192.168.0.255";
-    fputs("\e[m", stdout);
+    if (blockRangeMax.empty()) blockRangeMax = "200.10.0.0";
+
+    // CONFIG
+    const uint64_t startQSize = maxServers * 100;
+    puts("\e[m\nOther config details (change via statements marked \"CONFIG\" in code):");
+    printf("| Starting request queue size: \e[38;5;220m%llu\e[m\n", startQSize);
+    printf("| New request(s) every \e[38;5;220m%u\e[m cycles\n", NEW_REQ_INTERVAL);
+    printf("| New request amount range: [\e[38;5;220m%u\e[m, \e[38;5;220m%u\e[m]\n", NEW_REQ_AMT_MIN, NEW_REQ_AMT_MAX);
+    printf("| New request required time range: [\e[38;5;220m%u\e[m, \e[38;5;220m%u\e[m]\n\n", REQ_SIZE_MIN, REQ_SIZE_MAX);
+
+    fputs("\e[m\nPress \e[92m[Enter]\e[m to start...", stdout);
+    cin.get();
+    fputs("\e[m\n", stdout);
 
     LoadBalancer lb{
         maxServers,
@@ -43,12 +55,9 @@ int main() {
         IPRange{blockRangeMin, blockRangeMax}
     };
 
-    const uint64_t startQSize = maxServers * 100;
     for (uint32_t i = 0; i < startQSize; ++i) {
         lb.addRequest(new Request{});
     }
-
-    printf("Starting request queue size: \e[96m%llu\e[m\n", lb.queueSize());
 
     for (uint64_t time = 0; time <= timeToRun; time = lb.clock()) {
         if (time % NEW_REQ_INTERVAL == 0) {
@@ -63,8 +72,9 @@ int main() {
         #endif
     }
 
-    printf("Starting request queue size: \e[96m%llu\e[m\n", startQSize);
-    printf("Ending request queue size:   \e[96m%llu\e[m\n", lb.queueSize());
+    puts("\nSummary:");
+    printf("| Starting request queue size: \e[96m%llu\e[m\n", startQSize);
+    printf("| Ending request queue size:   \e[96m%llu\e[m\n\n", lb.queueSize());
 
     return 0;
 }
