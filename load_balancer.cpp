@@ -5,8 +5,8 @@
 #define SERVERS_MULT_LOW 2
 #define SERVERS_MULT_HIGH 5
 
-LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked) :
-    time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}
+LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked, Stats* stats) :
+    time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}, stats{stats}
 {
     logInfo = LogInfo{
         maxTimeDigits,
