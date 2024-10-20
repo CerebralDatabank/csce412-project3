@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <cstdint>
+#include <cinttypes>
 #include <iostream>
 #include <string>
 #include <vector>

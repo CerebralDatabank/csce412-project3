@@ -55,7 +55,7 @@ int main() {
     // CONFIG
     const uint64_t startQSize = maxServers * 100;
     puts("\e[m\nOther config details (change via statements marked \"CONFIG\" in code):");
-    printf("| Starting request queue size: \e[38;5;220m%llu\e[m\n", startQSize);
+    printf("| Starting request queue size: \e[38;5;220m%" PRIu64 "\e[m\n", startQSize);
     printf("| New request(s) every \e[38;5;220m%u\e[m cycles\n", NEW_REQ_INTERVAL);
     printf("| New request amount range: [\e[38;5;220m%u\e[m, \e[38;5;220m%u\e[m]\n", NEW_REQ_AMT_MIN, NEW_REQ_AMT_MAX);
     printf("| New request required time range: [\e[38;5;220m%u\e[m, \e[38;5;220m%u\e[m]\n\n", REQ_SIZE_MIN, REQ_SIZE_MAX);
@@ -83,13 +83,13 @@ int main() {
 
         #ifdef DEBUG
         int numDigits = to_string(timeToRun).length();
-        printf("\e[999C\e[%dD\e[2m%*llu\e[m\e[999D", numDigits - 1, numDigits, time);
+        printf("\e[999C\e[%dD\e[2m%*" PRIu64 "\e[m\e[999D", numDigits - 1, numDigits, time);
         #endif
     }
 
     puts("\nSummary:");
-    printf("| Starting request queue size: \e[96m%llu\e[m\n", startQSize);
-    printf("| Ending request queue size:   \e[96m%llu\e[m\n\n", lb.queueSize());
+    printf("| Starting request queue size: \e[96m%" PRIu64 "\e[m\n", startQSize);
+    printf("| Ending request queue size:   \e[96m%" PRIu64 "\e[m\n\n", lb.queueSize());
 
     return 0;
 }

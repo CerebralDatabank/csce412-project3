@@ -7,7 +7,7 @@ WebServer::WebServer(uint32_t id, LogInfo logInfo) :
 void WebServer::takeRequest(Request* req, uint64_t time) {
     if (request != nullptr) {
         printf(
-            "\e[2m[%*llu] \e[22;96m[Server \e[38;5;220m%*u\e[96m]\e[m Request of size \e[38;5;40m%*llu\e[m (\e[38;5;208m%15s\e[m -> \e[38;5;207m%-15s\e[m) completed\n",
+            "\e[2m[%*" PRIu64 "] \e[22;96m[Server \e[38;5;220m%*u\e[96m]\e[m Request of size \e[38;5;40m%*" PRIu64 "\e[m (\e[38;5;208m%15s\e[m -> \e[38;5;207m%-15s\e[m) completed\n",
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, id, logInfo.maxReqSizeDigits, request->requiredTime, request->ipIn.c_str(), request->ipOut.c_str()
         );
         delete request;

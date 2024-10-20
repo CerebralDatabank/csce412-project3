@@ -26,7 +26,7 @@ uint64_t LoadBalancer::clock() {
         Request* request = requests.front();
         requests.pop();
         printf(
-            "\e[2m[%*llu] \e[22;38;5;190m[System %*s]\e[m Request of size \e[38;5;40m%*llu\e[m (\e[38;5;208m%15s\e[m \e[91m-X \e[38;5;207m%-15s\e[m) \e[91mblocked\e[m\n",
+            "\e[2m[%*" PRIu64 "] \e[22;38;5;190m[System %*s]\e[m Request of size \e[38;5;40m%*" PRIu64 "\e[m (\e[38;5;208m%15s\e[m \e[91m-X \e[38;5;207m%-15s\e[m) \e[91mblocked\e[m\n",
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, "", logInfo.maxReqSizeDigits, request->requiredTime, request->ipIn.c_str(), request->ipOut.c_str()
         );
         delete request;
@@ -37,7 +37,7 @@ uint64_t LoadBalancer::clock() {
         uint32_t newId = servers.size() + 1;
         servers.push_back(new WebServer{static_cast<uint32_t>(newId), logInfo});
         printf(
-            "\e[2m[%*llu] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[92mnow online due to higher demand\e[m\n",
+            "\e[2m[%*" PRIu64 "] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[92mnow online due to higher demand\e[m\n",
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, newId
         );
     }
@@ -46,7 +46,7 @@ uint64_t LoadBalancer::clock() {
         delete servers.back();
         servers.pop_back();
         printf(
-            "\e[2m[%*llu] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[91mnow offline due to lower demand\e[m\n",
+            "\e[2m[%*" PRIu64 "] \e[22;96m[Server \e[38;5;220m%*u\e[96m] \e[91mnow offline due to lower demand\e[m\n",
             logInfo.maxTimeDigits, time, logInfo.maxIdDigits, oldId
         );
     }
