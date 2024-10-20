@@ -2,8 +2,8 @@ CC := g++
 CFLAGS := -Wall -Werror
 
 all:
-	$(CC) $(CFLAGS) -o project3.out *.cpp
+	$(CC) $(CFLAGS) -o project3 *.cpp
 
 .PHONY: clean
 clean:
-	rm -f project3.out
+	rm -f project3
