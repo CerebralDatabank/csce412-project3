@@ -28,6 +28,12 @@ constexpr int SERVERS_MULT_LOW = 2;
  */
 constexpr int SERVERS_MULT_HIGH = 5;
 
+/**
+ * @class LoadBalancer
+ * @brief Manages the requests and servers in the system.
+ * 
+ * The LoadBalancer class is responsible for managing the requests and servers in the system. It assigns requests to servers, blocks requests from certain IP ranges, and dynamically allocates servers based on the demand.
+ */
 class LoadBalancer {
 private:
     /**

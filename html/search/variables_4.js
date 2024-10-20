@@ -6,5 +6,5 @@ var searchData=
   ['requests_3',['requests',['../class_load_balancer.html#abcb5636e640bd869f94c802f6fe068b9',1,'LoadBalancer']]],
   ['requestsblocked_4',['requestsBlocked',['../struct_stats.html#a21fdcf3f68f5a7c0ea0251d48f5c1a19',1,'Stats']]],
   ['requestscompleted_5',['requestsCompleted',['../struct_stats.html#a7cde75ff4049c855a87363bd9fc1f0d7',1,'Stats']]],
-  ['requiredtime_6',['requiredTime',['../class_request.html#afeed0ac88689a39e600f139430ea78cd',1,'Request']]]
+  ['requiredtime_6',['requiredTime',['../class_request.html#a2ab5f1a2e7e11837eaf1e84e614faae5',1,'Request']]]
 ];
