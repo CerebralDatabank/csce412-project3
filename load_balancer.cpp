@@ -1,12 +1,12 @@
+/** @file load_balancer.cpp
+ *  @brief Load balancer implementation
+ * 
+ * This file contains the implementation of the LoadBalancer class. The LoadBalancer class is responsible for managing the requests and servers in the system. It assigns requests to servers and blocks requests from certain IP ranges. It also dynamically allocates servers based on the demand.
+ */
 #include "load_balancer.h"
 
-// CONFIG
-// Multipliers for dynamic server allocation
-#define SERVERS_MULT_LOW 2
-#define SERVERS_MULT_HIGH 5
-
-LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked) :
-    time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}
+LoadBalancer::LoadBalancer(uint32_t maxServers, uint32_t maxTimeDigits, IPRange blocked, Stats* stats) :
+    time{0}, requests{}, servers{}, maxServers{maxServers}, blocked{blocked}, stats{stats}
 {
     logInfo = LogInfo{
         maxTimeDigits,

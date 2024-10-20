@@ -1,3 +1,11 @@
+/** @file ip_range.h
+ * @brief A class to represent an IP range.
+ * 
+ * This file contains the definition of the IPRange class, which represents a range of IP addresses.
+ * The class contains a method to test if a given IP address is within the range.
+ * 
+ * @sa ip_range.cpp
+ */
 #include "ip_range.h"
 #include "common.h"
 

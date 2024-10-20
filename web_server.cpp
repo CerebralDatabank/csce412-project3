@@ -1,3 +1,9 @@
+/** @file web_server.cpp
+ * @brief Implementation file for the WebServer class.
+ * 
+ * This file contains the implementation of the WebServer class, which represents a web server that can process requests.
+ * The class includes methods for taking a request and checking if the server is free.
+ */
 #include "web_server.h"
 
 WebServer::WebServer(uint32_t id, LogInfo logInfo) :
